@@ -27,9 +27,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/flowy/flowy-styles.css",
+              "src/flowy/flowy.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/flowy/flowy.min.js"
+            ]
           },
           "configurations": {
             "production": {
