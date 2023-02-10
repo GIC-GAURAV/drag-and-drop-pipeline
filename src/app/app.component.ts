@@ -1,92 +1,87 @@
-import { Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-declare var flowy:any
+import { AfterViewInit, Component, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+declare var flowy: any
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
-  title = 'drag-and-drop';
-  lists = [
-    {
-      title : "New visitor",
-      description : "Triggers when somebody visits a specified page",
-      value : "1",
-      icon : "assets/eye.svg"
-    },
-    {
-      title : "Action is performed",
-      description : "Triggers when somebody performs a specified action",
-      value : "2",
-      icon : "assets/action.svg"
-    },
-    {
-      title : "Time has passed 1",
-      description : "Triggers after a specified amount of time",
-      value : "3",
-      icon : "assets/time.svg"
-    },
-    {
-      title : "Error prompt 1",
-      description : "Triggers when a specified error happens",
-      value : "4",
-      icon : "assets/error.svg"
-    },
-    {
-      title : "Garuav kakran",
-      description : "Hey, I'm gaurav kakran",
-      value : "5",
-      icon : "assets/error.svg"
+export class AppComponent implements OnInit, AfterViewInit {
+    title = 'drag-and-drop';
+    lists = [
+        {
+            title: "New visitor",
+            description: "Triggers when somebody visits a specified page",
+            value: "1",
+            icon: "assets/eye.svg"
+        },
+        {
+            title: "Action is performed",
+            description: "Triggers when somebody performs a specified action",
+            value: "2",
+            icon: "assets/action.svg"
+        },
+        {
+            title: "Time has passed 1",
+            description: "Triggers after a specified amount of time",
+            value: "3",
+            icon: "assets/time.svg"
+        },
+        {
+            title: "Error prompt 1",
+            description: "Triggers when a specified error happens",
+            value: "4",
+            icon: "assets/error.svg"
+        },
+        {
+            title: "Garuav kakran",
+            description: "Hey, I'm gaurav kakran",
+            value: "5",
+            icon: "assets/error.svg"
+        }
+    ]
+
+    aclick: any = false;
+    noinfo: any = false;
+
+    closeItem: any
+    blocklist: any
+    propertiesItem: any
+    propwrapItem: any
+    removeBlockItem: any
+    canvas: any
+    showHTML: any = false
+    @ViewChild("tempblock2", { read: ViewContainerRef }) tempblock2: { classList: { remove: (arg0: string) => void; }; } | undefined;
+    @ViewChild("tempblock", { read: ViewContainerRef }) tempblock: any = null;
+    rightcard: any = false;
+
+    constructor() { }
+
+    ngOnInit() {
+        this.blocklist = document.getElementById("blocklist")
+        this.propertiesItem = document.getElementById("properties")
+        this.propwrapItem = document.getElementById("propwrap")
+        this.removeBlockItem = document.getElementById("removeblock")
+        this.canvas = document.getElementById("canvas")
+        console.log("this.blocklist", this.blocklist)
+        this.blocklist.innerHTML = '<div class="blockelem create-flowy noselect"><input type="hidden" name="blockelemtype" class="blockelemtype" value="1"><div class="grabme"><img src="assets/grabme.svg"></div><div class="blockin">                  <div class="blockico"><span></span><img src="assets/eye.svg"></div><div class="blocktext">                        <p class="blocktitle">New visitor</p><p class="blockdesc">Triggers when somebody visits a specified page</p>        </div></div></div><div class="blockelem create-flowy noselect"><input type="hidden" name="blockelemtype" class="blockelemtype" value="2"><div class="grabme"><img src="assets/grabme.svg"></div><div class="blockin">                    <div class="blockico"><span></span><img src="assets/action.svg"></div><div class="blocktext">                        <p class="blocktitle">Action is performed</p><p class="blockdesc">Triggers when somebody performs a specified action</p></div></div></div><div class="blockelem create-flowy noselect"><input type="hidden" name="blockelemtype" class="blockelemtype" value="3"><div class="grabme"><img src="assets/grabme.svg"></div><div class="blockin">                    <div class="blockico"><span></span><img src="assets/time.svg"></div><div class="blocktext">                        <p class="blocktitle">Time has passed</p><p class="blockdesc">Triggers after a specified amount of time</p>          </div></div></div><div class="blockelem create-flowy noselect"><input type="hidden" name="blockelemtype" class="blockelemtype" value="4"><div class="grabme"><img src="assets/grabme.svg"></div><div class="blockin">                    <div class="blockico"><span></span><img src="assets/error.svg"></div><div class="blocktext">                        <p class="blocktitle">Error prompt</p><p class="blockdesc">Triggers when a specified error happens</p>              </div></div></div>';
+
+        this.addEventListenerMulti("click", this.disabledClick, false, ".side");
+        addEventListener("mousedown", this.beginTouch, false);
+        addEventListener("mousemove", this.checkTouch, false);
+        addEventListener("mouseup", this.doneTouch, false);
+        this.addEventListenerMulti("touchstart", this.beginTouch, false, ".block");
+        flowy = new flowy(this.canvas, this.drag, this.release, this.snapping);
     }
-  ]
 
-  aclick:any = false;
-  noinfo:any = false; 
-  
-  closeItem :any 
-  blocklist:any
-  propertiesItem:any 
-  propwrapItem:any 
-  removeBlockItem :any 
-  canvas : any 
-  showHTML : any = false
-  @ViewChild("tempblock2", { read: ViewContainerRef, static:true }) tempblock2:any = null;
-  @ViewChild("tempblock", { read: ViewContainerRef }) tempblock:any = null;
-  constructor(){
-
-  }
-  ngOnInit(){
-    this.blocklist = document.getElementById("blocklist")
-    this.propertiesItem = document.getElementById("properties")
-    this.propwrapItem = document.getElementById("propwrap")
-    this.removeBlockItem  = document.getElementById("removeblock")
-    this.canvas = document.getElementById("canvas")
-      console.log("this.blocklist", this.blocklist)
-      this.blocklist.innerHTML = '<div class="blockelem create-flowy noselect"><input type="hidden" name="blockelemtype" class="blockelemtype" value="1"><div class="grabme"><img src="assets/grabme.svg"></div><div class="blockin">                  <div class="blockico"><span></span><img src="assets/eye.svg"></div><div class="blocktext">                        <p class="blocktitle">New visitor</p><p class="blockdesc">Triggers when somebody visits a specified page</p>        </div></div></div><div class="blockelem create-flowy noselect"><input type="hidden" name="blockelemtype" class="blockelemtype" value="2"><div class="grabme"><img src="assets/grabme.svg"></div><div class="blockin">                    <div class="blockico"><span></span><img src="assets/action.svg"></div><div class="blocktext">                        <p class="blocktitle">Action is performed</p><p class="blockdesc">Triggers when somebody performs a specified action</p></div></div></div><div class="blockelem create-flowy noselect"><input type="hidden" name="blockelemtype" class="blockelemtype" value="3"><div class="grabme"><img src="assets/grabme.svg"></div><div class="blockin">                    <div class="blockico"><span></span><img src="assets/time.svg"></div><div class="blocktext">                        <p class="blocktitle">Time has passed</p><p class="blockdesc">Triggers after a specified amount of time</p>          </div></div></div><div class="blockelem create-flowy noselect"><input type="hidden" name="blockelemtype" class="blockelemtype" value="4"><div class="grabme"><img src="assets/grabme.svg"></div><div class="blockin">                    <div class="blockico"><span></span><img src="assets/error.svg"></div><div class="blocktext">                        <p class="blocktitle">Error prompt</p><p class="blockdesc">Triggers when a specified error happens</p>              </div></div></div>';
-      flowy = new flowy(this.canvas, this.drag, this.release, this.snapping);
-      this.addEventListenerMulti("click", this.disabledClick, false, ".side");
-      addEventListener("mousedown", this.beginTouch, false);
-      addEventListener("mousemove", this.checkTouch, false);
-      addEventListener("mouseup", this.doneTouch, false);
-      this.addEventListenerMulti("touchstart", this.beginTouch, false, ".block");
-  }
-
-
-
-    rightcard:any = false;
-    // tempblock : any;
-    // tempblock2 : any;
-   
-
-    addEventListenerMulti(type:any, listener:any, capture:any, selector:any) {
+    addEventListenerMulti(type: any, listener: any, capture: any, selector: any) {
         var nodes = document.querySelectorAll(selector);
         for (var i = 0; i < nodes.length; i++) {
             nodes[i].addEventListener(type, listener, capture);
         }
     }
 
-    snapping(drag:any, first:any) {
+    snapping(drag: any, first: any) {
         var grab = drag.querySelector(".grabme");
         grab.parentNode.removeChild(grab);
         var blockin = drag.querySelector(".blockin");
@@ -117,20 +112,22 @@ export class AppComponent implements OnInit {
         return true;
     }
 
-    drag(block?:any) {
-        if(this.tempblock2){
-          // console.log("Block", block, this.tempblock2)
-          block.classList.add("blockdisabled");
-          this.tempblock2 = block;
+    drag(block?: any) {
+        if (this.tempblock2) {
+            // console.log("Block", block, this.tempblock2)
+            block.classList.add("blockdisabled");
+            this.tempblock2 = block;
         }
     }
+
     release() {
         if (this.tempblock2) {
             this.tempblock2.classList.remove("blockdisabled");
         }
     }
-    disabledClick = () =>{
-        let navactive:any = document.querySelector(".navactive");
+
+    disabledClick() {
+        let navactive: any = document.querySelector(".navactive");
         navactive.classList.add("navdisabled");
         navactive.classList.remove("navactive");
         navactive.classList.add("navactive");
@@ -144,47 +141,45 @@ export class AppComponent implements OnInit {
         }
     }
 
-    
-close(){
-  this.closeItem.addEventListener("click", () =>{
-    if (this.rightcard) {
-        this.rightcard = false;
-        this.propertiesItem.classList.remove("expanded");
-        setTimeout(() =>{
-             this.propwrapItem.classList.remove("itson"); 
-        }, 300);
-         this.tempblock.classList.remove("selectedblock");
-    } 
- });
-}
+    ngAfterViewInit() {
+        this.closeItem?.addEventListener("click", () => {
+            if (this.rightcard) {
+                this.rightcard = false;
+                this.propertiesItem.classList.remove("expanded");
+                setTimeout(() => {
+                    this.propwrapItem.classList.remove("itson");
+                }, 300);
+                this.tempblock.classList.remove("selectedblock");
+            }
+        });
 
-removeBlock(){
-  this.removeBlockItem.addEventListener("click", () =>{
-    // flowy.deleteBlocks();
-   });
-}
+        this.removeBlockItem?.addEventListener("click", () => {
+            flowy.deleteBlocks();
+        });
+    }
 
-beginTouch = (event:any) =>{
-    let aclick = true;
-    let noinfo = false;
-    if (event.target.closest(".create-flowy")) {
-        noinfo = true;
+    beginTouch(event: any) {
+        let aclick = true;
+        let noinfo = false;
+        if (event.target.closest(".create-flowy")) {
+            noinfo = true;
+        }
     }
-}
-checkTouch = (event:any) =>{
-    let aclick = false;
-}
-doneTouch =  (event:any) => {
-    if (event.type === "mouseup" && this.aclick && !this.noinfo) {
-      if (!this.rightcard && event.target.closest(".block") && !event.target.closest(".block").classList.contains("dragging")) {
-            this.tempblock = event.target.closest(".block");
-            this.rightcard = true;
-            document.getElementById("properties")!.classList.add("expanded");
-            document.getElementById("propwrap")!.classList.add("itson");
-            this.tempblock.classList.add("selectedblock");
-       } 
+    checkTouch(event: any) {
+        let aclick = false;
     }
-}
+
+    doneTouch(event: any) {
+        if (event.type === "mouseup" && this.aclick && !this.noinfo) {
+            if (!this.rightcard && event.target.closest(".block") && !event.target.closest(".block").classList.contains("dragging")) {
+                this.tempblock = event.target.closest(".block");
+                this.rightcard = true;
+                this.propertiesItem.classList.add("expanded");
+                this.propwrapItem.classList.add("itson");
+                this.tempblock.classList.add("selectedblock");
+            }
+        }
+    }
 
 }
 
